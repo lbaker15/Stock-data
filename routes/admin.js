@@ -10,10 +10,11 @@ const reader = require('xlsx')
 const file = reader.readFile('./test.xlsx')
 
 const pushToArr = (key, arr, send, tic) => {
+    //console.log(send)
         let num = key[0] + key[1] + key[2] + key[3]
         //CHANGE IF WANT DATA BEFORE 2010
-        if (num > 2015) {
-            let obj = {'date': key, 'close': send[key]['4. close'], 'ticker': tic}
+        if (num > 2010) {
+            let obj = {'date': key, 'close': send[key]['4. close'], 'high': send[key]['2. high'], 'low': send[key]['3. low'],'ticker': tic}
             arr.push(obj)
         } else {
             return
@@ -29,7 +30,9 @@ const addToWorkBook = (array) => {
         worksheet.columns = [
                 {header: 'date', key: 'date'},
                 {header: 'close', key: 'close'},
-                {header: 'ticker', key: 'ticker'}
+                {header: 'ticker', key: 'ticker'},
+                {header: 'high', key: 'high'},
+                {header: 'low', key: 'low'}
         ]
         final.forEach((e, index) => {
             console.log(e)
@@ -48,7 +51,8 @@ const addToWorkBook = (array) => {
 router.get('/home', (req, response, next) => {
     let apiKey = 'RPOBY3XSMPFJWUWF';
     let func = 'TIME_SERIES_WEEKLY'
-    let ticker = ['IBM', 'AAPL', 'TSLA', 'GME', 'AMZN'];
+    // let ticker = ['IBM', 'AAPL', 'TSLA', 'GME', 'AMZN'];
+    let ticker = ['AAPL']
     //interval=5min
     let final = new Array;
     Promise.all(
